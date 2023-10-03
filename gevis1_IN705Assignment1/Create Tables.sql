@@ -4,7 +4,6 @@
 USE gevis1_IN705Assignment1;
 GO
 
--- Drop table if it exists
 IF OBJECT_ID('Contact', 'U') IS NOT NULL
   DROP TABLE Contact
 GO
