@@ -1,6 +1,10 @@
 -- =============================================
 -- Create Database
 -- =============================================
+
+-- Connect to default database to kill connection with assignment database
+USE ID705_202302_gevis1;
+
 -- Drop the database if it already exists
 IF EXISTS (
 	SELECT name 
