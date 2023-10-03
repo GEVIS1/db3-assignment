@@ -22,3 +22,19 @@ CREATE TABLE Contact
 )
 GO
 
+IF OBJECT_ID('Customer', 'U') IS NOT NULL
+  DROP TABLE Customer
+GO
+
+CREATE TABLE Customer
+(
+	CustomerID INTEGER NOT NULL,
+
+	CONSTRAINT FK_Customer_Contact
+		FOREIGN KEY (CustomerID)
+		REFERENCES Contact(ContactID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+)
+GO
+
