@@ -4,17 +4,21 @@
 USE gevis1_IN705Assignment1;
 GO
 
--- Drop table if it doesn't exist
-IF OBJECT_ID('Customer.Contact', 'U') IS NOT NULL
-  DROP TABLE Customer.Contact
+-- Drop table if it exists
+IF OBJECT_ID('Contact', 'U') IS NOT NULL
+  DROP TABLE Contact
 GO
 
-CREATE TABLE Customer.Contact
+CREATE TABLE Contact
 (
-	<columns_in_primary_key, , c1> <column1_datatype, , int> <column1_nullability,, NOT NULL>, 
-	<column2_name, sysname, c2> <column2_datatype, , char(10)> <column2_nullability,, NULL>, 
-	<column3_name, sysname, c3> <column3_datatype, , datetime> <column3_nullability,, NULL>, 
-    CONSTRAINT <contraint_name, sysname, PK_sample_table> PRIMARY KEY (<columns_in_primary_key, , c1>)
+	ContactID INTEGER PRIMARY KEY NOT NULL,
+	ContactName NVARCHAR(50) NOT NULL,
+	ContactPhone NVARCHAR(30) NOT NULL,
+	ContactFax NVARCHAR(30) NULL,
+	ContactMobilePhone NVARCHAR(30) NULL,
+	ContactEmail NVARCHAR(50) NULL,
+	ContactWWW NVARCHAR(50) NULL,
+	ContactPostalAddress NVARCHAR(100) NOT NULL,
 )
 GO
 
