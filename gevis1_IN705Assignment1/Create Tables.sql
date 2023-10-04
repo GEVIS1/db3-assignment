@@ -173,6 +173,37 @@ CREATE TABLE QuoteComponent
 )
 GO
 
+IF OBJECT_ID('AssemblySubComponent', 'U') IS NOT NULL
+  DROP TABLE AssemblySubComponent
+GO
+
+CREATE TABLE AssemblySubComponent
+(
+	AssemblyID INTEGER NOT NULL,
+	SubcomponentID INTEGER NOT NULL,
+
+	Quantity INTEGER DEFAULT 1,
+
+	CONSTRAINT FK_Subcomponent_Component
+		FOREIGN KEY (SubcomponentID)
+		REFERENCES Component(ComponentID)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION, -- Will be handled by trigger
+
+	CONSTRAINT FK_Assembly_Component
+		FOREIGN KEY (AssemblyID)
+		REFERENCES Component(ComponentID)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION, -- Will be handled by trigger
+
+	CONSTRAINT PK_AssemblySubcomponent
+		PRIMARY KEY (AssemblyID, SubcomponentID),
+
+	CONSTRAINT Valid_Quantity
+		CHECK (1 <= Quantity),
+)
+GO
+
 ---- Drop table if it exists
 --IF OBJECT_ID('<TableName>', 'U') IS NOT NULL
 --  DROP TABLE <TableName>
