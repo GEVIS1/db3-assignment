@@ -56,7 +56,7 @@ CREATE TABLE Quote
 		ON DELETE NO ACTION
 		ON UPDATE CASCADE,
 
-	CONSTRAINT Valid_QuotePrice
+	CONSTRAINT Valid_Quote_QuotePrice
 		CHECK (0 <= QuotePrice)
 )
 GO
@@ -74,7 +74,7 @@ CREATE TABLE Supplier
 		FOREIGN KEY (SupplierID)
 		REFERENCES Contact(ContactID),
 
-	CONSTRAINT Valid_SupplierGST
+	CONSTRAINT Valid_Supplier_SupplierGST
 		CHECK (0.0 <= SupplierGST AND SupplierGST <= 100.0)
 )
 GO
@@ -118,13 +118,13 @@ CREATE TABLE Component
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION,
 
-	CONSTRAINT Valid_TradePrice
+	CONSTRAINT Valid_Component_TradePrice
 		CHECK (0 <= TradePrice),
 
-	CONSTRAINT Valid_ListPrice
+	CONSTRAINT Valid_Component_ListPrice
 		CHECK (0 <= ListPrice),
 
-	CONSTRAINT Valid_TimeToFit
+	CONSTRAINT Valid_Component_TimeToFit
 		CHECK (0 <= TimeToFit),
 )
 GO
@@ -159,16 +159,16 @@ CREATE TABLE QuoteComponent
 	CONSTRAINT PK_QuoteComponent
 		PRIMARY KEY (ComponentID, QuoteID),
 
-	CONSTRAINT Valid_Quantity
+	CONSTRAINT Valid_QuoteComponent_Quantity
 		CHECK (1 <= Quantity),
 
-	CONSTRAINT Valid_TradePrice
+	CONSTRAINT Valid_QuoteComponent_TradePrice
 		CHECK (0 <= TradePrice),
 
-	CONSTRAINT Valid_ListPrice
+	CONSTRAINT Valid_QuoteComponent_ListPrice
 		CHECK (0 <= ListPrice),
 
-	CONSTRAINT Valid_TimeToFit
+	CONSTRAINT Valid_QuoteComponent_TimeToFit
 		CHECK (0 <= TimeToFit),
 )
 GO
@@ -199,7 +199,7 @@ CREATE TABLE AssemblySubComponent
 	CONSTRAINT PK_AssemblySubcomponent
 		PRIMARY KEY (AssemblyID, SubcomponentID),
 
-	CONSTRAINT Valid_Quantity
+	CONSTRAINT Valid_AssemblySubComponent_Quantity
 		CHECK (1 <= Quantity),
 )
 GO
