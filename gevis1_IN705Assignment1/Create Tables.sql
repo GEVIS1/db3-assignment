@@ -61,6 +61,27 @@ CREATE TABLE Quote
 )
 GO
 
+IF OBJECT_ID('Supplier', 'U') IS NOT NULL
+  DROP TABLE Supplier
+GO
+
+CREATE TABLE Supplier
+(
+	SupplierID INTEGER NOT NULL PRIMARY KEY,
+	SupplierGST DECIMAL(5,2) NOT NULL, -- DECIMAL(5,2) covers -999.99 to 999.99 which fits 0.00 to 100.00
+
+	CONSTRAINT FK_Supplier_Contact
+		FOREIGN KEY (SupplierID)
+		REFERENCES Contact(ContactID),
+
+	CONSTRAINT Valid_SupplierGST
+		CHECK (0.0 <= SupplierGST AND SupplierGST <= 100.0)
+)
+GO
+
+)
+GO
+
 IF OBJECT_ID('Component', 'U') IS NOT NULL
   DROP TABLE Component
 GO
