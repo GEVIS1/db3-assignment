@@ -203,15 +203,3 @@ CREATE TABLE AssemblySubComponent
 		CHECK (1 <= Quantity),
 )
 GO
-
----- Drop table if it exists
---IF OBJECT_ID('<TableName>', 'U') IS NOT NULL
---  DROP TABLE <TableName>
---GO
-
---CREATE TABLE <TableName>
---(
---	PrimaryKey INTEGER PRIMARY KEY NOT NULL,
---	Field1 NVARCHAR(50) NULL,
---)
---GO
