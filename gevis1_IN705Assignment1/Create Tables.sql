@@ -27,7 +27,7 @@ GO
 
 CREATE TABLE Customer
 (
-	CustomerID INTEGER NOT NULL,
+	CustomerID INTEGER NOT NULL PRIMARY KEY,
 
 	CONSTRAINT FK_Customer_Contact
 		FOREIGN KEY (CustomerID)
