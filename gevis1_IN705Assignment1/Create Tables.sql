@@ -61,6 +61,45 @@ CREATE TABLE Quote
 )
 GO
 
+IF OBJECT_ID('Component', 'U') IS NOT NULL
+  DROP TABLE Component
+GO
+
+CREATE TABLE Component
+(
+	ComponentID INTEGER NOT NULL PRIMARY KEY,
+
+	ComponentName VARCHAR(50) NOT NULL,
+	ComponentDescription VARCHAR(100) NOT NULL,
+	TradePrice MONEY NOT NULL,
+	ListPrice MONEY NOT NULL,
+	TimeToFit DECIMAL DEFAULT 0,
+	CategoryID INTEGER NOT NULL,
+	SupplierID INTEGER NOT NULL,
+	
+	CONSTRAINT FK_Component_Category
+		FOREIGN KEY (CategoryID)
+		REFERENCES Category(CategoryID)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+
+	CONSTRAINT FK_Component_Supplier
+		FOREIGN KEY (SupplierID)
+		REFERENCES Supplier(SupplierID)
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+
+	CONSTRAINT Valid_TradePrice
+		CHECK (0 <= TradePrice),
+
+	CONSTRAINT Valid_ListPrice
+		CHECK (0 <= ListPrice),
+
+	CONSTRAINT Valid_TimeToFit
+		CHECK (0 <= TimeToFit),
+)
+GO
+
 IF OBJECT_ID('QuoteComponent', 'U') IS NOT NULL
   DROP TABLE QuoteComponent
 GO
