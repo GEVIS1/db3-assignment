@@ -37,6 +37,31 @@ CREATE TABLE Customer
 )
 GO
 
+IF OBJECT_ID('Quote', 'U') IS NOT NULL
+  DROP TABLE Quote
+GO
+
+CREATE TABLE Quote
+(
+	QuoteID INTEGER IDENTITY PRIMARY KEY,
+	QuoteDescription NVARCHAR(100) NOT NULL,
+	QuoteDate DATE NOT NULL,
+	QuotePrice MONEY NULL,
+	QuoteCompiler VARCHAR(50) NOT NULL,
+	CustomerID INTEGER NOT NULL,
+
+	CONSTRAINT FK_Quote_Customer
+		FOREIGN KEY (CustomerID)
+		REFERENCES Customer(CustomerID)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+
+	CONSTRAINT Valid_QuotePrice
+		CHECK (0 <= QuotePrice)
+)
+GO
+
+
 ---- Drop table if it exists
 --IF OBJECT_ID('<TableName>', 'U') IS NOT NULL
 --  DROP TABLE <TableName>
