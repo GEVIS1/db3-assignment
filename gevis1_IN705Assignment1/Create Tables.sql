@@ -79,6 +79,14 @@ CREATE TABLE Supplier
 )
 GO
 
+IF OBJECT_ID('Category', 'U') IS NOT NULL
+  DROP TABLE Category
+GO
+
+CREATE TABLE Category
+(
+	CategoryID INTEGER IDENTITY PRIMARY KEY,
+	CategoryName NVARCHAR(20) NOT NULL,
 )
 GO
 
