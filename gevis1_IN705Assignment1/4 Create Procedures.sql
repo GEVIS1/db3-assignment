@@ -29,3 +29,41 @@ BEGIN
 	RETURN 0
 END
 GO
+
+CREATE OR ALTER PROCEDURE dbo.createCustomer
+	@Name NVARCHAR(50),
+	@Phone NVARCHAR(30),
+	@PostalAddress NVARCHAR(100),
+	@Email NVARCHAR(50) = NULL,
+	@WWW NVARCHAR(50) = NULL,
+	@Fax NVARCHAR(30) = NULL,
+	@MobilePhone NVARCHAR(30) = NULL
+AS
+BEGIN
+	INSERT INTO Contact (
+		ContactName,
+		ContactPhone,
+		ContactPostalAddress,
+		ContactEmail,
+		ContactWWW,
+		ContactFax,
+		ContactMobilePhone
+	)
+	VALUES (
+		@Name,
+		@Phone,
+		@PostalAddress,
+		@Email,
+		@WWW,
+		@Fax,
+		@MobilePhone
+	)
+
+	DECLARE @NewCustomerID INTEGER = @@IDENTITY;
+
+	INSERT INTO Customer (CustomerID)
+		VALUES (@NewCustomerID);
+
+	RETURN @NewCustomerID
+END
+GO
