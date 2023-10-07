@@ -128,6 +128,13 @@ EXEC dbo.createCustomer 'Kahaleel Sibley', '467-788-0976', '72 American Ash Park
 EXEC dbo.createCustomer 'Ram Luckie', '862-829-8939', '4 Thierer Road', 'rluckie8@timesonline.co.uk';
 EXEC dbo.createCustomer 'Bronny Zorzi', '425-834-1825', '7 Logan Drive';
 
+--create quotes
+DECLARE @Now DATE;
+SET @Now = CAST(GETDATE() AS DATE);
+DECLARE @NewQuoteID INTEGER;
+EXEC dbo.createQuote 'Some Description', @Now, 'That Guy', 14, @NewQuoteID
+SELECT * FROM Quote
+
 /*
 drop functions, views and sp
 drop proc createAssembly
