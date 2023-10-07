@@ -67,3 +67,35 @@ BEGIN
 	RETURN @NewCustomerID
 END
 GO
+
+CREATE OR ALTER PROCEDURE dbo.createQuote
+	@QuoteDescription NVARCHAR(100),
+	@QuoteDate DATE = NULL,
+	@QuoteCompiler VARCHAR(50),
+	@CustomerID INTEGER,
+	@QuoteID INTEGER OUTPUT
+AS
+BEGIN
+	-- Set date if NULL
+	IF @QuoteDate = NULL 
+		SET @QuoteDate = CAST(GETDATE() AS DATE);
+
+
+	INSERT INTO Quote (
+		QuoteDescription,
+		QuoteDate,
+		QuoteCompiler,
+		CustomerID
+	)
+	VALUES (
+		@QuoteDescription,
+		@QuoteDate,
+		@QuoteCompiler,
+		@CustomerID
+	);
+
+	SET @QuoteID = @@IDENTITY;
+
+	RETURN 0;
+END
+GO
