@@ -60,7 +60,9 @@ INSERT INTO Supplier (SupplierID, SupplierGST)
 );
 -- create components
 -- Note this script relies on you having captured the ContactID to insert into SupplierID
-SELECT * FROM Contact
+
+SET IDENTITY_INSERT Component ON
+
 insert Component (ComponentID, ComponentName, ComponentDescription, SupplierID, ListPrice, TradePrice, TimeToFit, CategoryID)
 values (30901, 'BMS10', '10mm M6 ms bolt', @ABC, 0.20, 0.17, 0.5, dbo.getCategoryID('Fixings'))
 insert Component (ComponentID, ComponentName, ComponentDescription, SupplierID, ListPrice, TradePrice, TimeToFit, CategoryID)
@@ -94,6 +96,7 @@ values (30922, 'DESLAB', 'Designer labour', @BITManf, 54.00, 54.00, 0, dbo.getCa
 insert Component (ComponentID, ComponentName, ComponentDescription, SupplierID, ListPrice, TradePrice, TimeToFit, CategoryID)
 values (30923, 'APPLAB', 'Apprentice labour', @BITManf, 23.50, 23.50, 0, dbo.getCategoryID('Labour'))
 
+SET IDENTITY_INSERT Component OFF
 
 /*
 --create assemblies
