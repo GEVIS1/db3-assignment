@@ -14,3 +14,14 @@ BEGIN
 	WHERE CategoryName = @CategoryName)
 END
 GO
+
+CREATE OR ALTER FUNCTION dbo.getAssemblySupplierID()
+RETURNS INTEGER
+AS
+BEGIN
+    RETURN (SELECT DISTINCT TOP(1)
+		CategoryID
+	FROM Category
+	WHERE CategoryName = 'BIT Manufacturing Ltd.')
+END
+GO
