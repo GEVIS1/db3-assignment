@@ -20,8 +20,9 @@ RETURNS INTEGER
 AS
 BEGIN
     RETURN (SELECT DISTINCT TOP(1)
-		CategoryID
-	FROM Category
-	WHERE CategoryName = 'BIT Manufacturing Ltd.')
+		SupplierID
+	FROM Supplier AS s
+	JOIN Contact AS c ON c.ContactID = s.SupplierID
+	WHERE c.ContactName = 'BIT Manufacturing Ltd.')
 END
 GO
