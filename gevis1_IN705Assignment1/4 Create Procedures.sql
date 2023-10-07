@@ -18,16 +18,14 @@ CREATE OR ALTER PROCEDURE dbo.addSubComponent
 	@Quantity INTEGER
 AS
 BEGIN
-	DECLARE @AssemblyID INTEGER = (
-		SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = @AssemblyName
-	);
-
-	DECLARE @SubComponentID INTEGER = (
-		SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = @SubComponentName
-	);
-
 	INSERT INTO AssemblySubComponent (AssemblyID, SubcomponentID, Quantity)
-		VALUES (@AssemblyID, @SubComponentID, @Quantity)
+		SELECT 
+			c1.ComponentID AS AssemblyID,
+			c2.ComponentID AS SubcomponentID,
+			@Quantity AS Quantity 
+		FROM Component AS c1
+		JOIN Component AS c2 ON c2.ComponentName = @SubComponentName
+		WHERE c1.ComponentName = @AssemblyName
 	RETURN 0
 END
 GO
