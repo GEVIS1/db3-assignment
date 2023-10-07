@@ -53,6 +53,11 @@ values ('BIT Manufacturing Ltd.', 'Forth Street, Dunedin', 'bitmanf.tekotago.ac.
 
 DECLARE @BITManf INTEGER = @@IDENTITY
 
+-- create suppliers
+INSERT INTO Supplier (SupplierID, SupplierGST)
+(
+	SELECT ContactID AS SupplierID, 22.9 AS SupplierGST FROM Contact
+);
 -- create components
 -- Note this script relies on you having captured the ContactID to insert into SupplierID
 
