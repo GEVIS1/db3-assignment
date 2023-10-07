@@ -200,6 +200,6 @@ CREATE TABLE AssemblySubComponent
 		PRIMARY KEY (AssemblyID, SubcomponentID),
 
 	CONSTRAINT Valid_AssemblySubComponent_Quantity
-		CHECK (1 <= Quantity),
+		CHECK (0 <= Quantity),
 )
 GO
