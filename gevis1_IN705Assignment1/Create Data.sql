@@ -98,7 +98,6 @@ values (30923, 'APPLAB', 'Apprentice labour', @BITManf, 23.50, 23.50, 0, dbo.get
 
 SET IDENTITY_INSERT Component OFF
 
-/*
 --create assemblies
 exec createAssembly  'SmallCorner.15', '15mm small corner'
 exec dbo.addSubComponent 'SmallCorner.15', 'BMS.5.15', 0.120
@@ -117,13 +116,23 @@ exec dbo.createAssembly 'CornerBrace.15', '15mm corner brace'
 exec dbo.addSubComponent 'CornerBrace.15', 'BMS.5.15', 0.090
 exec dbo.addSubComponent 'CornerBrace.15', 'BMS10', 2
 
+--create customers
+EXEC dbo.createCustomer 'Meridith Francino', '200-339-2140', '913 Union Point', 'mfrancino0@facebook.com', 'https://zdnet.com/nibh/quisque/id/justo/sit/amet.jpg', '846-829-1339', '681-262-1188';
+EXEC dbo.createCustomer 'Therese Jacketts', '547-597-6504', '61 Waxwing Drive', 'tjacketts1@xinhuanet.com', 'http://reuters.com/praesent/lectus/vestibulum/quam.js', '413-403-0697', '956-835-6296';
+EXEC dbo.createCustomer 'Elysee Yewen', '835-521-0499', '06361 Commercial Center', 'eyewen2@prnewswire.com', 'https://thetimes.co.uk/tortor/risus.js', '215-553-6723', '378-889-4915';
+EXEC dbo.createCustomer 'Cornela Folley', '494-923-3173', '9705 Stang Crossing', 'cfolley3@creativecommons.org', 'http://webnode.com/vulputate/nonummy/maecenas.js', '854-702-3879', '362-819-1265';
+EXEC dbo.createCustomer 'Jameson Wickwarth', '993-643-1190', '24909 Russell Parkway', 'jwickwarth4@wired.com', 'http://discuz.net/consequat/morbi/a/ipsum/integer/a/nibh.js', '504-709-7430', '129-557-9800';
+EXEC dbo.createCustomer 'Abbey Shimman', '645-447-0409', '84222 Bunting Hill', 'ashimman5@hao123.com', 'http://independent.co.uk/elementum/in/hac/habitasse/platea.html', '637-824-4908', '954-269-9920';
+EXEC dbo.createCustomer 'Marje Kliemann', '888-841-1540', '451 Grasskamp Hill', 'mkliemann6@issuu.com', 'https://wordpress.com/sapien/cum/sociis.xml', '733-885-2167';
+EXEC dbo.createCustomer 'Kahaleel Sibley', '467-788-0976', '72 American Ash Parkway', 'ksibley7@oracle.com', 'https://bbc.co.uk/amet.js';
+EXEC dbo.createCustomer 'Ram Luckie', '862-829-8939', '4 Thierer Road', 'rluckie8@timesonline.co.uk';
+EXEC dbo.createCustomer 'Bronny Zorzi', '425-834-1825', '7 Logan Drive';
 
-
---drop functions, views and sp
+/*
+drop functions, views and sp
 drop proc createAssembly
 drop proc addSubComponent
 drop function dbo.getCategoryID
 drop function dbo.getAssemblySupplierID
 
-
-   END  */
+END  */
