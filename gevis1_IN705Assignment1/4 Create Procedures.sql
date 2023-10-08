@@ -135,6 +135,8 @@ BEGIN
 	);
 
 	/*
+	DISABLED DUE TO OUT OF SCOPE
+
 	Update quote cost and TTF
 	Consider making this a trigger on the QuoteComponent table?
 	This will fail if QuotePrice is NULL, so make it 0
@@ -143,7 +145,7 @@ BEGIN
 	It also doesn't recursively tally up prices of assemblies since they are 0 cost, so there
 	needs to be a check if it is an assembly then a tally of all the subcomponents of that assembly
 	should be added.. either way this is huge feature creep for the assignment.
-	*/
+	
 	IF (SELECT DISTINCT TOP(1) QuotePrice FROM Quote WHERE QuoteID = @QuoteID) IS NULL
 		UPDATE Quote SET QuotePrice = 0 WHERE QuoteID = @QuoteID;
 
@@ -151,7 +153,7 @@ BEGIN
 	SET
 		QuotePrice += @Quantity * @CurrentTradePrice
 	WHERE QuoteID = @QuoteID;
-
+	*/
 	RETURN 0;
 END
 GO
