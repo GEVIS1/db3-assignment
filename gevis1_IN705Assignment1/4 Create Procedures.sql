@@ -77,7 +77,7 @@ CREATE OR ALTER PROCEDURE dbo.createQuote
 AS
 BEGIN
 	-- Set date if NULL
-	IF @QuoteDate = NULL 
+	IF @QuoteDate IS NULL
 		SET @QuoteDate = CAST(GETDATE() AS DATE);
 
 
