@@ -182,7 +182,7 @@ CREATE TABLE AssemblySubComponent
 	AssemblyID INTEGER NOT NULL,
 	SubcomponentID INTEGER NOT NULL,
 
-	Quantity INTEGER DEFAULT 1,
+	Quantity DECIMAL(9,2) DEFAULT 1,
 
 	CONSTRAINT FK_Subcomponent_Component
 		FOREIGN KEY (SubcomponentID)
