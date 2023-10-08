@@ -157,3 +157,50 @@ BEGIN
 	RETURN 0;
 END
 GO
+
+CREATE OR ALTER PROCEDURE updateAssemblyPrices
+AS
+BEGIN
+	-- Tally up total TradePrice and Listprice for all assemblies in common table expression
+	WITH [Assemblies] (AssemblyID, TradePrice, Listprice) AS
+	(
+		SELECT
+			co1.ComponentID,
+			SUM([asc].Quantity * co2.TradePrice) AS TradePrice,
+			SUM([asc].Quantity * co2.ListPrice) AS ListPrice
+		FROM Component AS co1
+		JOIN Category AS ca ON co1.CategoryID = ca.CategoryID
+		JOIN AssemblySubComponent AS [asc] ON co1.ComponentID = [asc].AssemblyID
+		JOIN Component AS co2 ON [asc].SubcomponentID = co2.ComponentID
+		WHERE ca.CategoryName = 'Assembly'
+		GROUP BY co1.ComponentID
+	)
+	UPDATE Component
+	SET
+		TradePrice = a.TradePrice,
+		ListPrice = a.ListPrice
+	FROM Component AS c
+	JOIN [Assemblies] AS a ON c.ComponentID = a.AssemblyID
+	WHERE ComponentID = a.AssemblyID
+	RETURN 0;
+END;
+GO
+
+-- TEST FOR updateAssemblyPrices
+/*
+BEGIN TRANSACTION
+
+SELECT *
+		FROM Component AS co1
+		JOIN Category AS ca ON co1.CategoryID = ca.CategoryID
+		WHERE ca.CategoryName = 'Assembly'
+
+EXEC updateAssemblyPrices
+
+SELECT *
+		FROM Component AS co1
+		JOIN Category AS ca ON co1.CategoryID = ca.CategoryID
+		WHERE ca.CategoryName = 'Assembly'
+
+ROLLBACK TRANSACTION
+*/
