@@ -99,3 +99,59 @@ BEGIN
 	RETURN 0;
 END
 GO
+
+CREATE OR ALTER PROCEDURE dbo.addQuoteComponent
+	@QuoteID INTEGER,
+	@ComponentID INTEGER,
+	@Quantity DECIMAL(9,2)
+AS
+BEGIN
+	-- Get prices and TimeToFit
+	DECLARE @CurrentTradePrice MONEY;
+	DECLARE @CurrentListPrice MONEY;
+	DECLARE @CurrentTimeToFit DECIMAL;
+
+	SELECT
+		@CurrentTradePrice = TradePrice,
+		@CurrentListPrice  = ListPrice,
+		@CurrentTimeToFit  = TimeToFit
+	FROM Component WHERE ComponentID = @ComponentID
+
+	INSERT INTO QuoteComponent (
+		ComponentID,
+		QuoteID,
+		Quantity,
+		TradePrice,
+		ListPrice,
+		TimeToFit
+	)
+	VALUES (
+		@ComponentID,
+		@QuoteID,
+		@Quantity,
+		@CurrentTradePrice,
+		@CurrentListPrice,
+		@CurrentTimeToFit
+	);
+
+	/*
+	Update quote cost and TTF
+	Consider making this a trigger on the QuoteComponent table?
+	This will fail if QuotePrice is NULL, so make it 0
+	This should be optimized into a single UPDATE statement but it is out of the scope of this assignment
+	so it is left as is..
+	It also doesn't recursively tally up prices of assemblies since they are 0 cost, so there
+	needs to be a check if it is an assembly then a tally of all the subcomponents of that assembly
+	should be added.. either way this is huge feature creep for the assignment.
+	*/
+	IF (SELECT DISTINCT TOP(1) QuotePrice FROM Quote WHERE QuoteID = @QuoteID) IS NULL
+		UPDATE Quote SET QuotePrice = 0 WHERE QuoteID = @QuoteID;
+
+	UPDATE Quote
+	SET
+		QuotePrice += @Quantity * @CurrentTradePrice
+	WHERE QuoteID = @QuoteID;
+
+	RETURN 0;
+END
+GO
