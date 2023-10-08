@@ -15,7 +15,7 @@ GO
 CREATE OR ALTER PROCEDURE dbo.addSubComponent
     @AssemblyName VARCHAR(50),
     @SubComponentName VARCHAR(50),
-	@Quantity INTEGER
+	@Quantity DECIMAL(19,9)
 AS
 BEGIN
 	INSERT INTO AssemblySubComponent (AssemblyID, SubcomponentID, Quantity)
@@ -103,7 +103,7 @@ GO
 CREATE OR ALTER PROCEDURE dbo.addQuoteComponent
 	@QuoteID INTEGER,
 	@ComponentID INTEGER,
-	@Quantity DECIMAL(9,2)
+	@Quantity DECIMAL(19,9)
 AS
 BEGIN
 	-- Get prices and TimeToFit
