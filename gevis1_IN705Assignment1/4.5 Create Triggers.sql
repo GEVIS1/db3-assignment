@@ -6,7 +6,7 @@ ON Supplier
 INSTEAD OF DELETE
 AS
 	-- Check that only one supplier is deleted
-	IF (SELECT COUNT(*) AS nRows FROM deleted) > 1
+	IF (@@ROWCOUNT) > 1
 		THROW 51000, 'Can not delete multiple suppliers at a time.', 1;
 
 	-- Capture Supplier info from deleted table joined with contact table
