@@ -160,7 +160,7 @@ CREATE TABLE QuoteComponent
 		PRIMARY KEY (ComponentID, QuoteID),
 
 	CONSTRAINT Valid_QuoteComponent_Quantity
-		CHECK (1 <= Quantity),
+		CHECK (0 <= Quantity),
 
 	CONSTRAINT Valid_QuoteComponent_TradePrice
 		CHECK (0 <= TradePrice),
