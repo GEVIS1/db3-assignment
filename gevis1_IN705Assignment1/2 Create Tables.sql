@@ -138,8 +138,8 @@ CREATE TABLE QuoteComponent
 	ComponentID INTEGER NOT NULL,
 	QuoteID INTEGER NOT NULL,
 
-	-- DECIMAL(9,2) gives a 5 byte size with a max number of 9999999.99 which is sufficient
-	Quantity DECIMAL(9,2) DEFAULT 1,
+	-- DECIMAL(19,9) gives a 9 byte size with a max number of 9999999999.999999999 which is sufficient
+	Quantity DECIMAL(19,9) DEFAULT 1,
 	TradePrice MONEY NOT NULL,
 	ListPrice MONEY NOT NULL,
 	TimeToFit DECIMAL DEFAULT 0,
@@ -182,7 +182,7 @@ CREATE TABLE AssemblySubComponent
 	AssemblyID INTEGER NOT NULL,
 	SubcomponentID INTEGER NOT NULL,
 
-	Quantity DECIMAL(9,2) DEFAULT 1,
+	Quantity DECIMAL(19,9) DEFAULT 1,
 
 	CONSTRAINT FK_Subcomponent_Component
 		FOREIGN KEY (SubcomponentID)
