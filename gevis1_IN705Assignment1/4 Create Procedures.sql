@@ -193,15 +193,32 @@ AS
 	IF NOT EXISTS(SELECT * FROM Component AS co JOIN Category AS ca ON co.CategoryID = ca.CategoryID WHERE co.ComponentID = @assemblyID AND ca.CategoryName = 'Assembly')
 		THROW 51000, 'ComponentID is not an assembly', 1;
 	
-	DECLARE @nSubassemblies INTEGER = (
-		SELECT DISTINCT TOP(1) COUNT(*)
-		FROM AssemblySubComponent
-		WHERE AssemblyID = @assemblyID AND SubcomponentID = @assemblyID
-	)
-	IF 0 < @nSubassemblies
+	-- Select everything from the
+	-- References:
+	-- https://www.red-gate.com/simple-talk/databases/sql-server/t-sql-programming-sql-server/sql-server-cte-basics/
+	-- https://stackoverflow.com/a/37680286
+	DECLARE @SuppressOutput TABLE (AssemblyID INTEGER, SubcomponentID INTEGER);
+	BEGIN TRY
+		WITH Subcomponents AS (
+			SELECT AssemblyID AS AssemblyID, SubcomponentID AS SubcomponentID
+			FROM AssemblySubComponent WHERE AssemblyID = @assemblyID
+			UNION ALL
+			SELECT asu2.AssemblyID AS AssemblyID, asu2.SubcomponentID AS SubSubcomponentID
+			FROM AssemblySubComponent AS asu2
+			INNER JOIN Subcomponents AS asu1 ON asu2.AssemblyID = asu1.SubcomponentID
+		)
+		INSERT INTO @SuppressOutput            -- Comment out this line to prove/visualize how the recursive CTE works by outputting the result
+			SELECT AssemblyID, SubcomponentID
+			FROM Subcomponents
+			--OPTION (MAXRECURSION 1000); -- Left commented out to visualize that the max recursion could be changed to allow for really big subassembly trees.
+				-- The default of 100 is sufficient for this imaginary environment and for visual inspection.
+	END TRY
+	BEGIN CATCH
+	-- If we end up here we know there is a cyclic sub-sub-...-assembly somewhere so return 1
 		RETURN 1;
-	ELSE
-		RETURN 0;
+	END CATCH;
 
+	-- If we reach this we know there are no cyclic assemblies
+	RETURN 0;
 ;
 GO
