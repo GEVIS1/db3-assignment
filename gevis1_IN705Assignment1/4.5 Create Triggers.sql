@@ -1,73 +1,69 @@
 USE gevis1_IN705Assignment1;
 GO
 
+CREATE OR ALTER TRIGGER trigFK_Assembly_Component
+ON Component
+AFTER UPDATE
+AS
+	--Only run if a ComponentID changed
+	IF UPDATE(ComponentID)
+	BEGIN
+		DECLARE @UpdatedAssemblies TABLE (
+			OldAssemblyComponentID INTEGER,
+			NewAssemblyComponentID INTEGER
+		);
+		INSERT INTO @UpdatedAssemblies
+			SELECT
+				d.ComponentID AS OldAssemblyComponentID,
+				i.ComponentID AS NewAssemblyComponentID
+			FROM deleted AS d
+			CROSS JOIN inserted AS i
+			-- We can confirm that it is an assembly by asserting that its CategoryName is 'Assembly'
+			-- NB: This could get funky if the assembly Component's category got changed from 'Assembly' to something else,
+			--     but this is unintended behaviour.
+			JOIN Category AS ca ON d.CategoryID = ca.CategoryID
+			WHERE ca.CategoryName = 'Assembly';
 
---CREATE OR ALTER TRIGGER trigFK_Assembly_Component
---ON Component
---AFTER UPDATE
---AS
-	-- Only run if a ComponentID changed
---	IF UPDATE(ComponentID)
---	BEGIN
---		DECLARE @UpdatedAssemblies TABLE (
---			OldAssemblyComponentID INTEGER,
---			NewAssemblyComponentID INTEGER
---		);
+		UPDATE AssemblySubcomponent
+		SET
+			AssemblyID = ua.NewAssemblyComponentID
+		FROM AssemblySubcomponent AS asu
+		JOIN @UpdatedAssemblies AS ua ON asu.AssemblyID = ua.OldAssemblyComponentID
+		WHERE asu.AssemblyID = ua.OldAssemblyComponentID;
+	END
+;
+GO
 
---		INSERT INTO @UpdatedAssemblies
---			SELECT
---				d.ComponentID AS OldAssemblyComponentID
---			FROM deleted AS d
---			UNION
---			SELECT
---				i.ComponentID AS NewAssemblyComponentID
---			FROM inserted AS i;
+-- This trigger should/could be merged with trigFK_Assembly_Component
+CREATE OR ALTER TRIGGER trigFK_Subcomponent_Component
+ON Component
+AFTER UPDATE
+AS
+--Only run if a ComponentID changed
+	IF UPDATE(ComponentID)
+	BEGIN
+		DECLARE @UpdatedSubcomponents TABLE (
+			OldSubcomponentID INTEGER,
+			NewSubComponentID INTEGER
+		);
+		INSERT INTO @UpdatedSubcomponents
+			SELECT
+				d.ComponentID AS OldSubcomponentID,
+				i.ComponentID AS NewSubcomponentID
+			FROM deleted AS d
+			CROSS JOIN inserted AS i
+			-- We can confirm that it is a subcomponent by asserting that its ComponentID is also a SubcomponentID
+			JOIN AssemblySubcomponent AS asu ON d.ComponentID = asu.SubcomponentID;
 
---		--SELECT * FROM @UpdatedAssemblies;
---	END
---;
---GO
-
----- Test trigFK_Assembly_Component
---BEGIN TRANSACTION
-
---ALTER TABLE Component
---	NOCHECK CONSTRAINT FK_Assembly_Component;
-
---UPDATE Component
---SET
---	ComponentID = 30999
---WHERE ComponentID = 30950;
-
---ALTER TABLE Component
---	CHECK CONSTRAINT FK_Assembly_Component;
-
---ROLLBACK TRANSACTION
---GO
-
---CREATE OR ALTER TRIGGER trigFK_Subcomponent_Component
---ON AssemblySubComponent
---AFTER UPDATE
---AS
---;
---GO
-
----- Test trigFK_Assembly_Component
---BEGIN TRANSACTION
-
---ALTER TABLE Component
---	NOCHECK CONSTRAINT FK_Subcomponent_Component;
-
---UPDATE Component
---SET
---	ComponentID = 40000
---WHERE ComponentID = <subcomponent id>;
-
---ALTER TABLE Component
---	CHECK CONSTRAINT FK_Subcomponent_Component;
-
---ROLLBACK TRANSACTION
---GO
+		UPDATE AssemblySubcomponent
+		SET
+			SubcomponentID = usu.NewSubComponentID
+		FROM AssemblySubcomponent AS asu
+		JOIN @UpdatedSubcomponents AS usu ON asu.SubcomponentID = usu.OldSubcomponentID
+		WHERE asu.SubcomponentID = usu.OldSubcomponentID;
+	END
+;
+GO
 
 CREATE OR ALTER TRIGGER trigSupplierDelete
 ON Supplier
