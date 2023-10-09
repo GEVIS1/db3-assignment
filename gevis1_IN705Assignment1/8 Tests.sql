@@ -112,3 +112,29 @@ SELECT *
 		WHERE ca.CategoryName = 'Assembly'
 
 ROLLBACK TRANSACTION
+
+-- Test isCyclicAssembly
+BEGIN TRANSACTION
+-- Not a component
+EXEC testCyclicAssembly 1
+ROLLBACK TRANSACTION
+-- Not an assembly
+BEGIN TRANSACTION
+EXEC testCyclicAssembly 30901
+ROLLBACK TRANSACTION
+-- Not cyclic
+BEGIN TRANSACTION
+DECLARE @NotCyclic INTEGER;
+EXEC @NotCyclic = testCyclicAssembly 31000 -- Assembly SmallCorner.15
+SELECT @NotCyclic AS NotCyclic
+ROLLBACK TRANSACTION
+-- Cyclic
+BEGIN TRANSACTION
+exec createAssembly 'Assembly A', 'An excellent assembly!'
+DECLARE @AssemblyAID INTEGER = (SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = 'Assembly A');
+-- Insert cyclic assembly
+exec dbo.addSubComponent 'Assembly A', 'Assembly A', 1
+DECLARE @Cyclic INTEGER;
+EXEC @Cyclic = testCyclicAssembly @AssemblyAID
+SELECT @Cyclic AS Cyclic
+ROLLBACK TRANSACTION

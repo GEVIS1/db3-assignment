@@ -184,3 +184,24 @@ BEGIN
 	RETURN 0;
 END;
 GO
+
+CREATE OR ALTER PROCEDURE testCyclicAssembly
+	@assemblyID INTEGER
+AS
+	IF NOT EXISTS (SELECT * FROM Component WHERE ComponentID = @assemblyID)
+		THROW 51000, 'Not a valid component ID', 1;
+	IF NOT EXISTS(SELECT * FROM Component AS co JOIN Category AS ca ON co.CategoryID = ca.CategoryID WHERE co.ComponentID = @assemblyID AND ca.CategoryName = 'Assembly')
+		THROW 51000, 'ComponentID is not an assembly', 1;
+	
+	DECLARE @nSubassemblies INTEGER = (
+		SELECT DISTINCT TOP(1) COUNT(*)
+		FROM AssemblySubComponent
+		WHERE AssemblyID = @assemblyID AND SubcomponentID = @assemblyID
+	)
+	IF 0 < @nSubassemblies
+		RETURN 1;
+	ELSE
+		RETURN 0;
+
+;
+GO
