@@ -1,6 +1,7 @@
 USE gevis1_IN705Assignment1;
+GO
 
--- Test trigFK_Assembly_Component
+-- Test trigFK_Assembly_Component #########################################################################################################
 BEGIN TRANSACTION
 -- Disable checks
 ALTER TABLE QuoteComponent
@@ -35,8 +36,9 @@ ALTER TABLE AssemblySubcomponent
 	CHECK CONSTRAINT FK_Assembly_Component;
 ROLLBACK TRANSACTION
 GO
+--#########################################################################################################################################
 
--- Test trigFK_Subcomponent_Component
+-- Test trigFK_Subcomponent_Component #####################################################################################################
 BEGIN TRANSACTION
 -- Disable checks
 ALTER TABLE QuoteComponent
@@ -71,8 +73,9 @@ ALTER TABLE AssemblySubcomponent
 	CHECK CONSTRAINT FK_Assembly_Component;
 ROLLBACK TRANSACTION
 GO
+--#########################################################################################################################################
 
--- Test trigSupplierDelete
+-- Test trigSupplierDelete ################################################################################################################
 -- Multiple supplier delete
 BEGIN TRANSACTION
 DELETE FROM Supplier
@@ -94,9 +97,10 @@ WHERE SupplierID IN (SELECT SupplierID FROM Supplier AS s JOIN Contact AS c ON s
 DELETE FROM Supplier
 WHERE SupplierID IN (SELECT SupplierID FROM Supplier AS s JOIN Contact AS c ON s.SupplierID = c.ContactID WHERE c.ContactName = 'ABC Ltd.');
 ROLLBACK TRANSACTION
+GO
+--#########################################################################################################################################
 
-
--- Test updateAssemblyPrices
+-- Test updateAssemblyPrices ##############################################################################################################
 BEGIN TRANSACTION
 
 SELECT *
