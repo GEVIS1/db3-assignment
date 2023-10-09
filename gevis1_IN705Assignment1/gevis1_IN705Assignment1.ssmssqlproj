@@ -4,7 +4,7 @@
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
         <ConnectionNode Name="127.0.0.1,1433:gevis1">
-          <Created>2023-09-12T22:35:01.9150829+12:00</Created>
+          <Created>2023-10-09T12:53:45.9002127+13:00</Created>
           <Type>SQL</Type>
           <Server>127.0.0.1,1433</Server>
           <UserName>gevis1</UserName>
@@ -19,29 +19,47 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="Create Database.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:127.0.0.1,1433:False:gevis1</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>127.0.0.1,1433</AssociatedConnSrvName>
-          <AssociatedConnUserName>gevis1</AssociatedConnUserName>
-          <FullPath>Create Database.sql</FullPath>
+        <FileNode Name="1 Create Database.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>1 Create Database.sql</FullPath>
         </FileNode>
-        <FileNode Name="Create Schemas.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:127.0.0.1,1433:False:gevis1</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>127.0.0.1,1433</AssociatedConnSrvName>
-          <AssociatedConnUserName>gevis1</AssociatedConnUserName>
-          <FullPath>Create Schemas.sql</FullPath>
+        <FileNode Name="2 Create Tables.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>2 Create Tables.sql</FullPath>
         </FileNode>
-        <FileNode Name="Create Tables.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:127.0.0.1,1433:False:gevis1</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>127.0.0.1,1433</AssociatedConnSrvName>
-          <AssociatedConnUserName>gevis1</AssociatedConnUserName>
-          <FullPath>Create Tables.sql</FullPath>
+        <FileNode Name="3 Create Functions.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>3 Create Functions.sql</FullPath>
         </FileNode>
-        <FileNode Name="SQLQuery1.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:127.0.0.1,1433:False:gevis1</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>127.0.0.1,1433</AssociatedConnSrvName>
-          <AssociatedConnUserName>gevis1</AssociatedConnUserName>
-          <FullPath>SQLQuery1.sql</FullPath>
+        <FileNode Name="4 Create Procedures.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>4 Create Procedures.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4.5 Create Triggers.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>4.5 Create Triggers.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5 Create Data.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>5 Create Data.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6 Create Quote Data.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>6 Create Quote Data.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
