@@ -14,7 +14,12 @@ EXEC dbo.createQuote 'Craypot frame', NULL, 'Hiro Protagonist', @Bimble, @QuoteI
 IF @BimbleQuoteIDFrame IS NULL
 	THROW 51000, 'NULL @BimbleQuoteIDFrame', 1;
 
-EXEC dbo.addQuoteComponent @BimbleQuoteIDFrame, 30951, 3
+DECLARE @SquareStrapAssemblyID INTEGER = (
+	SELECT ComponentID
+		FROM Component
+		WHERE ComponentName = 'SquareStrap.1000.15');
+
+EXEC dbo.addQuoteComponent @BimbleQuoteIDFrame, @SquareStrapAssemblyID, 3
 EXEC dbo.addQuoteComponent @BimbleQuoteIDFrame, 30912, 8
 EXEC dbo.addQuoteComponent @BimbleQuoteIDFrame, 30901, 24
 EXEC dbo.addQuoteComponent @BimbleQuoteIDFrame, 30904, 24
@@ -45,8 +50,18 @@ EXEC dbo.createQuote 'Phasing restitution fulcrum', NULL, 'Y.T.', @Hyperfont, @Q
 IF @HyperfontQuoteID IS NULL
 	THROW 51000, 'NULL @HyperfontQuoteID', 1;
 
-EXEC dbo.addQuoteComponent @HyperFontQuoteID, 30952, 3
-EXEC dbo.addQuoteComponent @HyperFontQuoteID, 30950, 1
+DECLARE @CornerBraceAssemblyID INTEGER = (
+	SELECT ComponentID
+		FROM Component
+		WHERE ComponentName = 'CornerBrace.15');
+
+DECLARE @SmallCornerAssemblyID INTEGER = (
+	SELECT ComponentID
+		FROM Component
+		WHERE ComponentName = 'SmallCorner.15');
+
+EXEC dbo.addQuoteComponent @HyperFontQuoteID, @CornerBraceAssemblyID, 3
+EXEC dbo.addQuoteComponent @HyperFontQuoteID, @SmallCornerAssemblyID, 1
 EXEC dbo.addQuoteComponent @HyperFontQuoteID, 30921, 320
 EXEC dbo.addQuoteComponent @HyperFontQuoteID, 30922, 105
 EXEC dbo.addQuoteComponent @HyperFontQuoteID, 30932, 0.5
