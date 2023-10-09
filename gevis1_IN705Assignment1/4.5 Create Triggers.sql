@@ -6,84 +6,42 @@ GO
 --ON Component
 --AFTER UPDATE
 --AS
---	-- Is there a better way to do this?
---	/*
---	-- Store the assembly components' old IDs before updating Component
---	DECLARE @Assemblies TABLE (AssemblyID INTEGER, CategoryID INTEGER);
+	-- Only run if a ComponentID changed
+--	IF UPDATE(ComponentID)
+--	BEGIN
+--		DECLARE @UpdatedAssemblies TABLE (
+--			OldAssemblyComponentID INTEGER,
+--			NewAssemblyComponentID INTEGER
+--		);
 
---	INSERT INTO @Assemblies
---		SELECT i.ComponentID, i.CategoryID 
---		FROM inserted AS i
---		JOIN Category AS c ON i.CategoryID = c.CategoryID
---		WHERE c.CategoryName = 'Assembly';
+--		INSERT INTO @UpdatedAssemblies
+--			SELECT
+--				d.ComponentID AS OldAssemblyComponentID
+--			FROM deleted AS d
+--			UNION
+--			SELECT
+--				i.ComponentID AS NewAssemblyComponentID
+--			FROM inserted AS i;
 
---	-- Run the actual update statement
---	UPDATE Component
---	SET 
---		ComponentID = CASE 
---			WHEN i.ComponentID <> c.ComponentID THEN i.ComponentID
---			ELSE c.ComponentID END,
---		ComponentName = CASE
---			WHEN i.ComponentName <> c.ComponentName THEN i.ComponentName
---			ELSE c.ComponentName END,
---		ComponentDescription = CASE
---			WHEN i.ComponentDescription <> c.ComponentDescription THEN i.ComponentDescription
---			ELSE c.ComponentDescription END,
---		TradePrice = CASE
---			WHEN i.TradePrice <> c.TradePrice THEN i.TradePrice
---			ELSE c.TradePrice END,
---		ListPrice = CASE
---			WHEN i.ListPrice <> c.ListPrice THEN i.ListPrice
---			ELSE c.ListPrice END,
---		TimeToFit = CASE
---			WHEN i.TimeToFit <> c.TimeToFit THEN i.TimeToFit
---			ELSE c.TimeToFit END,
---		CategoryID = CASE
---			WHEN i.CategoryID <> c.CategoryID THEN i.CategoryID
---			ELSE c.CategoryID END,
---		SupplierID = CASE
---			WHEN i.SupplierID <> c.SupplierID THEN i.SupplierID
---			ELSE c.SupplierID END
---	FROM inserted AS i
---	JOIN Component AS c ON i.ComponentID = c.ComponentID
---	WHERE c.ComponentID = i.ComponentID;
-
---	-- Update the sub components
---	UPDATE AssemblySubComponent
---	SET
---		AssemblyID = inserted.ComponentID
---	FROM AssemblySubComponent AS ac
---	JOIN @Assemblies AS a ON ac.AssemblyID = a.AssemblyID
---	WHERE a.AssemblyID = ac.AssemblyID
-
---	*/
-
---	-- Yes.. The old IDS are in Deleted and the new in Inserted.
---	DECLARE @UpdatedAssemblies TABLE (
---		OldAssemblyComponentID INTEGER,
---		NewAssemblyComponentID INTEGER
---	);
-
---	--INSERT INTO @UpdatedAssemblies
---	SELECT
---		d.ComponentID AS OldAssemblyComponentID
---	FROM deleted AS d
---	UNION 
---	SELECT
---		i.ComponentID AS NewAssemblyComponentID
---	FROM inserted AS i;
-
---	--SELECT * FROM @UpdatedAssemblies;
+--		--SELECT * FROM @UpdatedAssemblies;
+--	END
 --;
 --GO
 
+---- Test trigFK_Assembly_Component
 --BEGIN TRANSACTION
---SET IDENTITY_INSERT Component ON
+
+--ALTER TABLE Component
+--	NOCHECK CONSTRAINT FK_Assembly_Component;
+
 --UPDATE Component
 --SET
---	ComponentID = 30959
+--	ComponentID = 30999
 --WHERE ComponentID = 30950;
---SET IDENTITY_INSERT Component OFF
+
+--ALTER TABLE Component
+--	CHECK CONSTRAINT FK_Assembly_Component;
+
 --ROLLBACK TRANSACTION
 --GO
 
@@ -92,7 +50,24 @@ GO
 --AFTER UPDATE
 --AS
 --;
-GO
+--GO
+
+---- Test trigFK_Assembly_Component
+--BEGIN TRANSACTION
+
+--ALTER TABLE Component
+--	NOCHECK CONSTRAINT FK_Subcomponent_Component;
+
+--UPDATE Component
+--SET
+--	ComponentID = 40000
+--WHERE ComponentID = <subcomponent id>;
+
+--ALTER TABLE Component
+--	CHECK CONSTRAINT FK_Subcomponent_Component;
+
+--ROLLBACK TRANSACTION
+--GO
 
 CREATE OR ALTER TRIGGER trigSupplierDelete
 ON Supplier
