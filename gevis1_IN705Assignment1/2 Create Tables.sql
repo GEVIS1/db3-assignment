@@ -96,7 +96,7 @@ GO
 
 CREATE TABLE Component
 (
-	ComponentID INTEGER IDENTITY(30950,1) PRIMARY KEY,
+	ComponentID INTEGER NOT NULL PRIMARY KEY,
 
 	ComponentName VARCHAR(50) NOT NULL,
 	ComponentDescription VARCHAR(100) NOT NULL,
@@ -128,6 +128,12 @@ CREATE TABLE Component
 		CHECK (0 <= TimeToFit),
 )
 GO
+
+-- Sequence for ComponentID
+CREATE SEQUENCE [dbo].ComponentID
+AS INTEGER
+START WITH 31000
+INCREMENT BY 1;
 
 IF OBJECT_ID('QuoteComponent', 'U') IS NOT NULL
   DROP TABLE QuoteComponent
