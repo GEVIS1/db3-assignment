@@ -184,22 +184,3 @@ BEGIN
 	RETURN 0;
 END;
 GO
-
--- TEST FOR updateAssemblyPrices
-/*
-BEGIN TRANSACTION
-
-SELECT *
-		FROM Component AS co1
-		JOIN Category AS ca ON co1.CategoryID = ca.CategoryID
-		WHERE ca.CategoryName = 'Assembly'
-
-EXEC updateAssemblyPrices
-
-SELECT *
-		FROM Component AS co1
-		JOIN Category AS ca ON co1.CategoryID = ca.CategoryID
-		WHERE ca.CategoryName = 'Assembly'
-
-ROLLBACK TRANSACTION
-*/
