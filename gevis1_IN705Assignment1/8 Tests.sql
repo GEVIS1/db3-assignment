@@ -116,29 +116,65 @@ SELECT *
 		WHERE ca.CategoryName = 'Assembly'
 
 ROLLBACK TRANSACTION
+GO
+--#########################################################################################################################################
 
--- Test isCyclicAssembly
-BEGIN TRANSACTION
+-- Test isCyclicAssembly ##################################################################################################################
 -- Not a component
+BEGIN TRANSACTION
 EXEC testCyclicAssembly 1
 ROLLBACK TRANSACTION
+
 -- Not an assembly
 BEGIN TRANSACTION
 EXEC testCyclicAssembly 30901
 ROLLBACK TRANSACTION
+
 -- Not cyclic
 BEGIN TRANSACTION
 DECLARE @NotCyclic INTEGER;
 EXEC @NotCyclic = testCyclicAssembly 31000 -- Assembly SmallCorner.15
 SELECT @NotCyclic AS NotCyclic
 ROLLBACK TRANSACTION
--- Cyclic
+
+-- Cyclic subcomponent
 BEGIN TRANSACTION
 exec createAssembly 'Assembly A', 'An excellent assembly!'
 DECLARE @AssemblyAID INTEGER = (SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = 'Assembly A');
 -- Insert cyclic assembly
 exec dbo.addSubComponent 'Assembly A', 'Assembly A', 1
-DECLARE @Cyclic INTEGER;
-EXEC @Cyclic = testCyclicAssembly @AssemblyAID
-SELECT @Cyclic AS Cyclic
+DECLARE @CyclicSub INTEGER;
+EXEC @CyclicSub = testCyclicAssembly @AssemblyAID
+SELECT @CyclicSub AS CyclicSub
 ROLLBACK TRANSACTION
+
+-- Non-Cyclic sub-sub-component
+BEGIN TRANSACTION
+exec createAssembly 'Assembly 1', 'The 1st assembly'
+DECLARE @Assembly1ID INTEGER = (SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = 'Assembly 1');
+exec createAssembly 'Assembly 2', 'The 2nd assembly'
+DECLARE @Assembly2ID INTEGER = (SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = 'Assembly 2');
+exec createAssembly 'Assembly 3', 'The 3rd assembly'
+DECLARE @Assembly3ID INTEGER = (SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = 'Assembly 3');
+-- Insert assemblies into eachother
+exec dbo.addSubComponent 'Assembly 2', 'Assembly 3', 1
+exec dbo.addSubComponent 'Assembly 1', 'Assembly 2', 1
+DECLARE @NotCyclicSubSub INTEGER;
+EXEC @NotCyclicSubSub = testCyclicAssembly @Assembly1ID
+SELECT @NotCyclicSubSub AS CyclicSubSub
+ROLLBACK TRANSACTION
+
+-- Cyclic sub-sub-component
+BEGIN TRANSACTION
+exec createAssembly 'Assembly B', 'A non-repudiable assembly!'
+DECLARE @AssemblyBID INTEGER = (SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = 'Assembly B');
+exec createAssembly 'Assembly C', 'An incredulous assembly!'
+DECLARE @AssemblyCID INTEGER = (SELECT DISTINCT TOP(1) ComponentID FROM Component WHERE ComponentName = 'Assembly C');
+-- Insert cyclic assembly
+exec dbo.addSubComponent 'Assembly B', 'Assembly C', 1;
+exec dbo.addSubComponent 'Assembly C', 'Assembly B', 1;
+DECLARE @CyclicSubSub INTEGER;
+EXEC @CyclicSubSub = testCyclicAssembly @AssemblyBID
+SELECT @CyclicSubSub AS CyclicSubSub;
+ROLLBACK TRANSACTION
+--##################################################################################################################################
