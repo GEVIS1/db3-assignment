@@ -69,6 +69,8 @@ CREATE OR ALTER TRIGGER trigSupplierDelete
 ON Supplier
 INSTEAD OF DELETE
 AS
+	-- Disable extended error message information: --NB: I don't have access to set this flag
+	--DBCC TRACEOFF(3625);-- WITH NO_INFOMSGS;
 	-- Check that only one supplier is deleted
 	IF (@@ROWCOUNT) > 1
 		THROW 51000, 'Can not delete multiple suppliers at a time.', 1;
